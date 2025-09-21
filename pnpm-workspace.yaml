@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+    - "@tailwindcss/oxide"
+    - "@vercel/speed-insights"
+    - msgpackr-extract
+    - sharp
+    - unrs-resolver
