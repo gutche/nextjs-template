@@ -7,7 +7,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import { SEO_CONFIG } from "@/app";
 // import { ourFileRouter } from "@/app/api/uploadthing/core";
-// import { CartProvider } from "@/lib/hooks/use-cart";
+import { CartProvider } from "@/lib/hooks/use-cart";
 import "@/css/globals.css";
 // import { Footer } from "~/ui/components/footer";
 import { Navbar } from "@/ui/components/navbar/navbar";
@@ -47,12 +47,12 @@ export default function RootLayout({
 			`}>
 				<ThemeProvider attribute="class" defaultTheme="system" disableTransitionOnChange enableSystem>
 					{/* <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} /> */}
-					<Navbar showAuth={true} />
-					<main className={`flex min-h-screen flex-col`}>{children}</main>
-					{/* <CartProvider> */}
-					{/* <Footer /> */}
-					{/* <Toaster /> */}
-					{/* </CartProvider> */}
+					<CartProvider>
+						<Navbar showAuth={true} />
+						<main className={`flex min-h-screen flex-col`}>{children}</main>
+						{/* <Footer /> */}
+						{/* <Toaster /> */}
+					</CartProvider>
 				</ThemeProvider>
 				<SpeedInsights />
 			</body>
