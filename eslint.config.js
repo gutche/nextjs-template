@@ -1,61 +1,47 @@
-import eslintJs from "@eslint/js";
-import eslintReact from "@eslint-react/eslint-plugin";
+// eslint.config.js
 import eslintParserTypeScript from "@typescript-eslint/parser";
-import perfectionist from "eslint-plugin-perfectionist";
-import eslintPluginReadableTailwind from "eslint-plugin-readable-tailwind";
-import tseslint from "typescript-eslint";
+import eslintPluginBetterTailwindcss from "eslint-plugin-better-tailwindcss";
 
 export default [
-  eslintJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...tseslint.configs.stylistic,
-
-  // fatima.eslint.plugin, // import { linter as fatima } from "fatima";
-
   {
-    ignores: ["node_modules", ".next"],
+    ignores: [".next/*", "node_modules/*"],
   },
-
   {
-    files: ["**/*.{ts,tsx}"],
-    ...eslintReact.configs["recommended-typescript"],
+    files: ["**/*.{ts,tsx,cts,mts}"],
     languageOptions: {
       parser: eslintParserTypeScript,
       parserOptions: {
-        ecmaFeatures: { jsx: true },
         project: true,
       },
     },
   },
-
-  perfectionist.configs["recommended-natural"],
-
   {
-    files: ["**/*.{ts,tsx}"],
+    files: ["**/*.{jsx,tsx}"],
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     plugins: {
-      "readable-tailwind": eslintPluginReadableTailwind,
+      "better-tailwindcss": eslintPluginBetterTailwindcss,
     },
     rules: {
-      ...eslintPluginReadableTailwind.configs.warning.rules,
-      "@eslint-react/hooks-extra/no-direct-set-state-in-use-effect": "off",
-      "@eslint-react/no-array-index-key": "off",
-      "@typescript-eslint/no-explicit-any": "off",
-      "no-unused-vars": "off",
-      "no-useless-escape": "off",
+      // enable all recommended rules to report a warning
+      ...eslintPluginBetterTailwindcss.configs["recommended-warn"].rules,
+      // enable all recommended rules to report an error
+      ...eslintPluginBetterTailwindcss.configs["recommended-error"].rules,
+
+      // or configure rules individually
+      "better-tailwindcss/enforce-consistent-line-wrapping": ["warn", { printWidth: 100 }],
+      "better-tailwindcss/no-unregistered-classes": "off",
     },
     settings: {
-      "readable-tailwind": {
+      "better-tailwindcss": {
+        // tailwindcss 4: the path to the entry file of the css based tailwind config (eg: `src/global.css`)
         entryPoint: "src/css/globals.css",
       },
     },
   },
-
-  {
-    files: ["next-env.d.ts"],
-    rules: {
-      "@typescript-eslint/triple-slash-reference": "off",
-    },
-  },
-
-  // fatima.eslint.noEnvRule("**/*.tsx"),
 ];
