@@ -19,6 +19,8 @@ export function TwoFactorPageClient() {
   const [backupMessage, setBackupMessage] = useState("");
   const [backupLoading, setBackupLoading] = useState(false);
 
+  const trustDeviceId = useId();
+
   const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -144,14 +146,13 @@ export function TwoFactorPageClient() {
             {!isUsingBackupCode && (
               <div className="flex items-start">
                 <div className="flex h-5 items-center">
-                  {/** biome-ignore lint/correctness/useUniqueElementIds: conditional rendered component */}
                   <input
                     checked={trustDevice}
                     className={`
                       h-4 w-4 rounded border-gray-300 text-blue-600
                       focus:ring-blue-500
                     `}
-                    id="trustDevice"
+                    id={trustDeviceId}
                     name="trustDevice"
                     onChange={(e) => {
                       setTrustDevice(e.target.checked);

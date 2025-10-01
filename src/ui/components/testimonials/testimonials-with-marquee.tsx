@@ -124,7 +124,7 @@ export function TestimonialsSection({ className, description, testimonials, titl
         </div>
 
         <div className={`relative flex w-full flex-col items-center justify-center overflow-hidden`}>
-          {/** biome-ignore lint/a11y/noStaticElementInteractions: it's just to play animation on hover */}
+          {/** biome-ignore lint/a11y/noStaticElementInteractions: trust me :) */}
           <div
             className={`
               flex flex-row
