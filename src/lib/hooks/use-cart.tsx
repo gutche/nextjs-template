@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { createContext, useState, useRef, useEffect, useCallback, useMemo, use } from "react";
 
 import type { CartItem } from "@/ui/components/cart";
 
@@ -22,7 +22,7 @@ export interface CartContextType {
 /*                                Context                                     */
 /* -------------------------------------------------------------------------- */
 
-const CartContext = React.createContext<CartContextType | undefined>(undefined);
+const CartContext = createContext<CartContextType | undefined>(undefined);
 
 /* -------------------------------------------------------------------------- */
 /*                         Local-storage helpers                              */
@@ -51,12 +51,12 @@ const loadCartFromStorage = (): CartItem[] => {
 /* -------------------------------------------------------------------------- */
 
 export function CartProvider({ children }: React.PropsWithChildren) {
-  const [items, setItems] = React.useState<CartItem[]>(loadCartFromStorage);
+  const [items, setItems] = useState<CartItem[]>(loadCartFromStorage);
 
   /* -------------------- Persist to localStorage (debounced) ------------- */
-  const saveTimeout = React.useRef<null | ReturnType<typeof setTimeout>>(null);
+  const saveTimeout = useRef<null | ReturnType<typeof setTimeout>>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (saveTimeout.current) clearTimeout(saveTimeout.current);
     saveTimeout.current = setTimeout(() => {
       try {
@@ -72,7 +72,7 @@ export function CartProvider({ children }: React.PropsWithChildren) {
   }, [items]);
 
   /* ----------------------------- Actions -------------------------------- */
-  const addItem = React.useCallback((newItem: Omit<CartItem, "quantity">, qty = 1) => {
+  const addItem = useCallback((newItem: Omit<CartItem, "quantity">, qty = 1) => {
     if (qty <= 0) return;
     setItems((prev) => {
       const existing = prev.find((i) => i.id === newItem.id);
@@ -83,11 +83,11 @@ export function CartProvider({ children }: React.PropsWithChildren) {
     });
   }, []);
 
-  const removeItem = React.useCallback((id: string) => {
+  const removeItem = useCallback((id: string) => {
     setItems((prev) => prev.filter((i) => i.id !== id));
   }, []);
 
-  const updateQuantity = React.useCallback((id: string, qty: number) => {
+  const updateQuantity = useCallback((id: string, qty: number) => {
     setItems((prev) =>
       prev.flatMap((i) => {
         if (i.id !== id) return i;
@@ -98,15 +98,15 @@ export function CartProvider({ children }: React.PropsWithChildren) {
     );
   }, []);
 
-  const clearCart = React.useCallback(() => setItems([]), []);
+  const clearCart = useCallback(() => setItems([]), []);
 
   /* --------------------------- Derived data ----------------------------- */
-  const itemCount = React.useMemo(() => items.reduce((t, i) => t + i.quantity, 0), [items]);
+  const itemCount = useMemo(() => items.reduce((t, i) => t + i.quantity, 0), [items]);
 
-  const subtotal = React.useMemo(() => items.reduce((t, i) => t + i.price * i.quantity, 0), [items]);
+  const subtotal = useMemo(() => items.reduce((t, i) => t + i.price * i.quantity, 0), [items]);
 
   /* ----------------------------- Context value -------------------------- */
-  const value = React.useMemo<CartContextType>(
+  const value = useMemo<CartContextType>(
     () => ({
       addItem,
       clearCart,
@@ -127,7 +127,7 @@ export function CartProvider({ children }: React.PropsWithChildren) {
 /* -------------------------------------------------------------------------- */
 
 export function useCart(): CartContextType {
-  const ctx = React.use(CartContext);
+  const ctx = use(CartContext);
   if (!ctx) throw new Error("useCart must be used within a CartProvider");
   return ctx;
 }
