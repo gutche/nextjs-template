@@ -9,10 +9,10 @@ import { SEO_CONFIG } from "@/app";
 // import { ourFileRouter } from "@/app/api/uploadthing/core";
 import { CartProvider } from "@/lib/hooks/use-cart";
 import "@/css/globals.css";
-// import { Footer } from "~/ui/components/footer";
+import { Footer } from "@/ui/components/footer";
 import { Navbar } from "@/ui/components/navbar/navbar";
 import { ThemeProvider } from "@/ui/components/theme-provider";
-// import { Toaster } from "~/ui/primitives/sonner";
+import { Toaster } from "@/ui/primitives/sonner";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -50,8 +50,8 @@ export default function RootLayout({
           <CartProvider>
             <Navbar showAuth={true} />
             <main className={`flex min-h-screen flex-col`}>{children}</main>
-            {/* <Footer /> */}
-            {/* <Toaster /> */}
+            <Footer />
+            <Toaster />
           </CartProvider>
         </ThemeProvider>
         <SpeedInsights />
